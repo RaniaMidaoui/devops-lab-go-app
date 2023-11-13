@@ -9,6 +9,9 @@ pipeline {
       PROJECT_KEY="devops-lab-go-app-advanced"
       REGISTRY_CRED = 'docker_creds'
       NETWORK = 'tools_jenkins'
+      K8S_CONFIG_NAME="kubeconfig"
+      K8S_NAMESPACE = 'default'
+      K8S_DEPLOYMENT_NAME = "devops-lab-go-app-advanced"
     }
 
     tools {
@@ -64,6 +67,19 @@ pipeline {
                     }
             }
         }
+
+        stage('Deploy App') {
+            steps {
+                script{
+                    docker.image('bitnami/kubectl').inside("--entrypoint=''  --net minikube"){
+                        withKubeConfig([credentialsId: "$K8S_CONFIG_NAME", namespace: "$K8S_NAMESPACE"]) {
+                            sh "kubectl -n \${K8S_NAMESPACE} rollout restart deployment.apps/\${K8S_DEPLOYMENT_NAME}"
+                        }
+                    }
+                }                
+            }
+        }
+        
     }
 
 
