@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-lab-go-app-advanced
+  labels:
+    app: devops-lab-go-app-advanced
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devops-lab-go-app-advanced
+  template:
+    metadata:
+      labels:
+        app: devops-lab-go-app-advanced
+    spec:
+      containers:
+      - name: devops-lab-go-app-advanced
+        image: raniamidaoui/devops-lab-go-app-advanced:latest
+        ports:
+        - containerPort: 8080
